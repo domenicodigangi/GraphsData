@@ -1,0 +1,69 @@
+#/*programma gawk che restituisce  un file testo gestibile con matlab contenente le colonne relative ai codici elencati
+	
+
+						
+
+BEGIN{
+       FS = "\t";   # imposto ^ come field separator 
+       
+#/*elenco i codici da cercare commentandoli con le rispettive descrizioni contenute in sample_dictionary.xlsx
+ 
+ 	codici[1]="IDRSSD"; 
+		
+	codici[2]="FDIC Certificate Number"; 
+
+	codici[3]="Financial Institution Name"; 
+	
+	codici[4]="Financial Institution Address"; 
+
+	codici[5]="Financial Institution City"; 
+		
+	codici[6]="Financial Institution State"; 
+
+	codici[7]="Financial Institution Zip Code"; 
+	
+	codici[8]="Financial Institution Filing Type"; 
+
+
+
+
+
+
+
+numcodici = 8; #è il numero dei codici da cercare. Va aggiornato se si aggiungono codici
+
+for(n=1; n<=numcodici; n++) colonnecodici[n] = 0; #inizializzo il vettore colonnecodici a 0 . se un codice non viene trovato nel primo record il corrispettivo valore di colonnecodici[indicecodicenontrovato] è 0
+  
+codtrov=0;# serve a contare il numero di codici trovati nel primo record
+
+
+}             
+
+# cerca i codici elencati in codici[] nel primo record , se li trova annota il numero del field(colonna) corrispondente in colonnecodici[] e aumenta di uno codtrov.
+(NR==1){for(l=1; l<=numcodici; l++){
+				for(j=0; j<=NF; j++){
+							if(codici[l]==$j) {colonnecodici[l]=j; codtrov++;}
+														
+ 						    }
+			     }
+
+	}
+
+# annotati i numeri delle colonne di interesse in colonnecodici per ogni record (riga) copio i valori delle colonne corrispondenti nella matrice matrix[][] di dimensioni NR *  numcodici. copio anche le colonne corrispondenti a codici non trovati per avere matrici delle stesse dimensioni  pur processando files relativi a periodi diversi
+
+(NR != 2){	matrix[NR][1]=$1; #aggiungo la colonna con i nomi delle firme
+		for(m=2; m<=numcodici+1; m++){matrix[NR][m]="NaN";}  
+		for(k=1;k<=numcodici; k++){if(colonnecodici[k]!=0 && $colonnecodici[k]!=""){matrix[NR][k+1]=$colonnecodici[k];}
+     		 }
+	}
+        
+  END{ 									
+		for(s=1; s<=NR; s++)	{
+					for(d=1; d<=numcodici+1; d++)printf(matrix[s][d] "\t")
+					printf("\n")
+				}				
+     }
+                  
+
+
+

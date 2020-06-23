@@ -1,0 +1,21 @@
+Names_assets1,Names_assets2,Names_assets3
+Cash and balances due from depository institutions,cashab,cashab
+U.S. Treasury Securities,ust_sec,ust sec.
+U.S. Agency Securities,agency_sec,agency sec.
+Securities Issued by State and Local Government,stat_sec,state sec.
+Mortgage Backed Securities,mbs,mbs
+Asset Backed Securities,abs,abs
+Other Domestic Debt Securities,dom_debt_oth_sec,dom. debt. sec.
+Foreign Debt Securities,for_debt_sec,for. debt. sec.
+Residual Securities,res_sec,res. sec.
+Futures Forwards Sold and Securities Purchased Under Agreement to Resell,ffrepo_ass,ffrepo ass.
+Loans Secured by Real Estates in Domestic Offices,ln_re_dom,ln. re. dom.
+Loans Secured by Real Estates in Foreign Offices,ln_re_for,ln. re. for.
+Commercial and Industrial Loans in Domestic Offices,ln_ci_dom,ln. ci. dom.
+Commercial and Industrial Loans in Foreign Offices,ln_ci_for,ln. ci. for.
+Loans to Consumers in Domestic Offices,ln_cons_dom,ln. cons. dom.
+Loans to Consumers in Foreign Offices,ln_cons_for,ln. cons. for.
+Loans to Depository Institutions  and Acceptances of Other Banks,ln_dep_inst_banks,ln. dep. inst.
+Other Loans,oth_loans,oth. loans
+Equity Securities that do not have Readly  Determinable Fair Value,equ_sec_nondet,equ. sec. undet.
+Other Assets,oth_ass,oth. ass.

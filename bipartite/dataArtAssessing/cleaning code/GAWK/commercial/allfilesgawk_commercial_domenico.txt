@@ -1,0 +1,19 @@
+#applica selezcodici a tutti i files in ogni cartella relativa ad un quarto, unisce i files ottenuti da selezionacodici con paste e riapplica seleziona codici al file ottenuto.
+
+for fold in /home/domenico/Dropbox/Data_reservoir/Commercial_banks_U_S/folders/F*;
+	do
+	mkdir "$fold"/temp
+	for file in "$fold"/FFIEC\ CDR\ Call\ Schedule\ RC*;
+		do
+			
+		    	gawk -f selezcodicigawk_commercial_domenico.txt "$file" > "$fold"/temp/"$(basename "$file")_sorted_temp.txt"	
+
+		done
+	paste "$fold"/temp/* > "$fold"/final.txt
+
+	gawk -f selezcodicigawk_commercial_domenico.txt "$fold"/final.txt > /home/domenico/Dropbox/Tesi_Systemic_Risk/data/COM_data/sorted/"$(basename "$fold")_sorted.txt"
+	done
+
+
+
+

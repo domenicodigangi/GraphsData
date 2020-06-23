@@ -1,0 +1,631 @@
+#/*programma gawk che restituisce  un file testo gestibile con matlab contenente le colonne relative ai codici elencati
+
+
+BEGIN{
+       FS = "\t";   # imposto Tab come field separator 
+       
+#/*elenco i codici da cercare commentandoli con le rispettive descrizioni contenute nel file stesso alla riga due della colonna corrispondente al codice
+ 
+
+	codici[11]= "\"IDRSSD\""; Nome
+
+	codici[22]= "time"; 
+				#assets Total Assets assets  
+	
+	codici[33]="RCFD2170"; # Consolidated Total assets 				
+
+	codici[44]="RCON2170"; # domestic Total assets
+
+       	codici[55]="RCFD2123"; # LESS: Any unearned income on loans reflected in items 1-9 above .
+
+	codici[66]="RCON2123"; # LESS: Any unearned income on loans reflected in items 1-9 above .
+
+	codici[77]="RCFD3123"; # LESS: Allowance for loan and lease losses
+
+	codici[88]="RCON3123"; # LESS: Allowance for loan and lease losses
+
+				#Equity
+
+
+	codici[99]="RCFD3210"; # Total bank equity capital
+
+	codici[1010]="RCON3210"; # Total bank equity capital
+
+	codici[1111]="RCFD3000";Noncontrolling (minority) interests in consolidated subsidiaries
+
+	codici[1212]="RCON3000";Noncontrolling (minority) interests in consolidated subsidiaries
+
+	codici[1311] = "RCFDG105";Total equity capital
+
+	codici[1411] = "RCONG105";Total equity capital
+
+				#Cash and Balances
+	codici[15] = "RCFD0081";
+
+	codici[16] = "RCON0081";
+
+	codici[17] = "RCFD0071";
+
+	codici[18] = "RCON0071";
+
+				#US treasury securities
+
+	codici[19] = "RCFD0211";
+
+	codici[20] = "RCON0211";
+
+	codici[21] = "RCFD1287";
+
+	codici[22] = "RCON1287";
+
+	codici[23] = "RDFD3531";
+
+	codici[24] = "RCON3531";
+
+				#Us Agency securities
+
+	codici[25] = "RCFD1289";
+
+	codici[26] = "RCON1289";
+
+	codici[27] = "RCFD1294";
+
+	codici[28] = "RCON1294";
+
+	codici[29] = "RCFD1293";
+
+	codici[30] = "RCON1293";
+
+	codici[31] = "RCFD1298";
+
+	codici[32] = "RCON1298";
+
+	codici[33] = "RCFD3532";
+
+	codici[34] = "RCON3532";
+
+				#Securities issued by state and local governments
+
+	codici[35] = "RCFD8496";
+
+	codici[36] = "RCON8496";
+
+	codici[37] = "RCFD8499";
+
+	codici[38] = "RCON8499";
+
+	codici[39] = "RCFD3533";
+
+	codici[40] = "RCON3533";
+
+	
+				#Mortgage backed securities
+	codici[41] = "RCFD1698";
+
+	codici[42] = "RCON1698";
+
+	codici[43] = "RCFD1702";
+
+	codici[44] = "RCON1702";
+
+	codici[45] = "RCFD1703";
+
+	codici[46] = "RCON1703";
+
+	codici[47] = "RCFD1707";
+
+	codici[48] = "RCON1707";
+
+	codici[49] = "RCFD1709";
+
+	codici[50] = "RCON1709";
+
+	codici[51] = "RCFD1713";
+
+	codici[52] = "RCON1713";
+
+	codici[53] = "RCFD1714";
+
+	codici[54] = "RCON1714";
+
+	codici[55] = "RCFD1717";
+
+	codici[56] = "RCON1717";
+
+	codici[57] = "RCFD1718";
+
+	codici[58] = "RCON1718";
+
+	codici[59] = "RCFD1732";
+
+	codici[60] = "RCON1732";
+
+	codici[61] = "RCFD1733";
+
+	codici[62] = "RCON1733";
+
+	codici[63] = "RCFD1736";
+
+	codici[64] = "RCON1736";
+
+	codici[65] = "RCFD3534";
+
+	codici[66] = "RCON3534";
+
+	codici[67] = "RCFD3535";
+
+	codici[68] = "RCON3535";
+
+	codici[69] = "RCFD3536";
+
+	codici[70] = "RCON3536";
+
+	codici[71] = "RCFDG303";
+
+	codici[72] = "RCONG303";
+
+	codici[73] = "RCFDG304";
+
+	codici[74] = "RCONG304";
+
+	codici[75] = "RCFDG307";
+
+	codici[76] = "RCONG307";
+
+	codici[77] = "RCFDG308";
+
+	codici[78] = "RCONG308";
+
+	codici[79] = "RCFDG311";
+
+	codici[80] = "RCONG311";
+
+	codici[81] = "RCFDG312";
+
+	codici[82] = "RCONG312";
+
+	codici[83] = "RCFDG315";
+
+	codici[84] = "RCONG315";
+
+	codici[85] = "RCFDG316";
+
+	codici[86] = "RCONG316";
+
+	codici[87] = "RCFDG319";
+
+	codici[88] = "RCONG319";
+
+	codici[89] = "RCFDG320";
+
+	codici[90] = "RCONG320";
+
+	codici[91] = "RCFDG323";
+
+	codici[92] = "RCONG323";
+
+	codici[93] = "RCFDG324";
+
+	codici[94] = "RCONG324";
+
+	codici[95] = "RCFDG327";
+
+	codici[96] = "RCONG327";
+
+	codici[97] = "RCFDG328";
+
+	codici[98] = "RCONG328";
+
+	codici[99] = "RCFDG331";
+
+	codici[100] = "RCONG331";
+
+	codici[101] = "RCFDG379";
+
+	codici[102] = "RCONG379";
+
+	codici[103] = "RCFDG380";
+
+	codici[104] = "RCONG380";
+
+	codici[105] = "RCFDG381";
+
+	codici[106] = "RCONG381";
+
+	codici[107] = "RCFDG382";
+
+	codici[108] = "RCONG382";
+
+	codici[109] = "RCFDG300";
+
+	codici[110] = "RCONG300";
+
+	codici[111] = "RCFDG303";
+
+	codici[112] = "RCONG303";
+
+	codici[113] = "RCFDG304";
+
+	codici[114] = "RCONG304";
+
+	codici[115] = "RCFDG307";
+
+	codici[116] = "RCONG307";
+
+	codici[117] = "RCFDG308";
+
+	codici[118] = "RCONG308";
+
+	codici[119] = "RCFDG311";
+
+	codici[120] = "RCONG311";
+
+	codici[121] = "RCFDG312";
+
+	codici[122] = "RCONG312";
+
+	codici[123] = "RCFDG315";
+
+	codici[124] = "RCONG315";
+
+	codici[125] = "RCFDG316";
+
+	codici[126] = "RCONG316";
+
+	codici[127] = "RCFDG319";
+
+	codici[128] = "RCONG319";
+
+	codici[129] = "RCFDG320";
+
+	codici[130] = "RCONG320";
+
+	codici[131] = "RCFDG323";
+
+	codici[132] = "RCONG323";
+
+	codici[133] = "RCFDK142";
+
+	codici[134] = "RCONK142";
+
+	codici[135] = "RCFDK145";
+
+	codici[136] = "RCONK145";
+
+
+	codici[137] = "RCFDK146";
+
+	codici[138] = "RCONK146";
+
+	codici[139] = "RCFDK149";
+
+	codici[140] = "RCONK149";
+
+	codici[141] = "RCFDK150";
+
+	codici[142] = "RCONK150";
+
+	codici[143] = "RCFDK153";
+
+	codici[144] = "RCONK153";
+
+	codici[145] = "RCFDK154";
+
+	codici[146] = "RCONK154";
+
+	codici[147] = "RCFDK157";
+
+	codici[148] = "RCONK157";
+
+	codici[149] = "RCFDG379";
+
+	codici[150] = "RCONG379";
+
+	codici[151] = "RCFDG380";
+
+	codici[152] = "RCONG380";
+
+	codici[153] = "RCFDG381";
+
+	codici[154] = "RCONG381";
+
+	codici[155] = "RCFDK197";
+
+	codici[156] = "RCONK197";
+
+	codici[157] = "RCFDK198";
+
+	codici[158] = "RCONK198";
+
+					#Asset Backed securities
+
+	codici[159] = "RCFDB841";
+
+	codici[160] = "RCONB841";
+
+	codici[161] = "RCFDB842";
+
+	codici[162] = "RCONB842";
+
+	codici[163] = "RCFDB845";
+
+	codici[164] = "RCONB845";
+
+	codici[165] = "RCFDB846";
+
+	codici[166] = "RCONB846";
+
+	codici[167] = "RCFDB849";
+
+	codici[168] = "RCONB849";
+
+	codici[169] = "RCFDB850";
+
+	codici[170] = "RCONB850";
+
+	codici[171] = "RCFDB853";
+
+	codici[172] = "RCONB853";
+
+	codici[173] = "RCFDB854";
+
+	codici[174] = "RCONB854";
+
+	codici[175] = "RCFDB857";
+
+	codici[176] = "RCONB857";
+
+	codici[177] = "RCFDB858";
+
+	codici[178] = "RCONB858";
+
+	codici[179] = "RCFDB861";
+
+	codici[180] = "RCONB861";
+
+	codici[181] = "RCFDC026";
+
+	codici[182] = "RCONC026";
+
+	codici[183] = "RCFDG336";
+
+	codici[184] = "RCONG336";
+
+	codici[185] = "RCFDG340";
+
+	codici[186] = "RCONG340";
+
+	codici[187] = "RCFDG344";
+
+	codici[188] = "RCONG344";
+
+	codici[189] = "RCFDC027";
+
+	codici[190] = "RCONC027";
+
+	codici[191] = "RCFDG339";
+
+	codici[192] = "RCONG339";
+
+	codici[193] = "RCFDG343";
+
+	codici[194] = "RCONG343";
+
+	codici[195] = "RCFDG347";
+
+	codici[196] = "RCONG347";
+
+				#OTHER DOMESTIC DEBT SECURITIES
+
+	codici[197] = "RCFD1737";
+
+	codici[198] = "RCON1737";
+
+	codici[199] = "RCFD1741";
+
+	codici[200] = "RCON1741";
+
+				#OTHER FOREIGH DEBT SECURITIES
+	codici[201] = "RCFD1742";
+
+	codici[202] = "RCON1742";
+
+	codici[203] = "RCFD1746";
+
+	codici[204] = "RCON1746";
+
+				#RESIDENTIAL SECURITIES
+	codici[205] = "RCFDA511";
+
+	codici[206] = "RCONA511";
+
+
+				#FFREPO_ASS
+	codici[207] = "RCFD1350";
+
+	codici[208] = "RCON1350";
+
+	codici[209] = "RCFDB978";
+
+	codici[210] = "RCONB978";
+
+	codici[211] = "RCFDB989";
+
+	codici[212] = "RCONB989";
+
+				#LN_CONST
+	codici[213] = "RCFD1415";
+
+	codici[214] = "RCON1415";
+
+	codici[215] = "RCFDF158";
+
+	codici[216] = "RCONF158";
+
+	codici[217] = "RCFDF159";
+
+	codici[218] = "RCONF159";
+
+				#LN_FARM
+
+	codici[219] = "RCFD1420";
+
+	codici[220] = "RCON1420";
+
+				#LN_RRE
+
+	codici[221] = "RCFD5367";
+
+	codici[222] = "RCON5367";
+
+	codici[223] = "RCFD5368";
+
+	codici[224] = "RCON5368";
+
+	codici[225] = "RCFD1797";
+
+	codici[226] = "RCON1797";
+
+				#LN_MULTI
+
+	codici[227] = "RCFD1460";
+
+	codici[228] = "RCON1460";
+
+
+				#LN_NFNR
+	codici[229] = "RCFD1480";
+
+	codici[230] = "RCON1480";
+
+	codici[231] = "RCFDF160";
+
+	codici[232] = "RCONF160";
+
+	codici[233] = "RCFDF161";
+
+	codici[234] = "RCONF161";
+
+
+				#LN_RE_FOR
+	codici[235] = "RCFD1410";
+
+	codici[236] = "RCON1410";
+
+				#LN_CI_DOM
+
+	codici[237] = "RCFD1766";
+
+	codici[238] = "RCON1766";
+				#LN_CI_FOR
+
+	codici[239] = "RCFD1763";
+
+	codici[240] = "RCON1763";
+
+	codici[241] = "RCFD1764";
+
+	codici[242] = "RCON1764";
+
+	codici[243] = "RCFD1766";
+
+	codici[244] = "RCON1766";
+
+				#LN_CONS_DOM
+
+	codici[245] = "RCFD1975";
+
+	codici[246] = "RCON1975";
+
+				#LN_CONS_FOR
+
+	codici[247] = "RCFDB358";
+
+	codici[248] = "RCONB358";
+
+	codici[249] = "RCFDB359";
+
+	codici[250] = "RCONB359";
+
+	codici[251] = "RCFDK137";
+
+	codici[252] = "RCONK137";
+
+	codici[253] = "RCFDK207";
+
+	codici[254] = "RCONK207";
+
+	codici[255] = "RCFD2011";
+
+	codici[256] = "RCON2011";
+
+	codici[257] = "RCFD1975";
+
+	codici[258] = "RCON1975";
+
+
+				#LN_FORGOV_OFFINST
+	codici[259] = "RCFD2081";
+
+	codici[260] = "RCON2081";
+
+
+				#OTHER LOANS
+	codici[261] = "RCFD2122";
+
+	codici[262] = "RCON2122";
+
+	codici[263] = "RCFD2123";
+
+	codici[264] = "RCON2123";
+
+				#OTHER_RE_OWNED
+	codici[265] = "RCFD2150";
+
+	codici[266] = "RCON2150";
+
+
+				#EQU_SEC_NONDET
+	codici[267] = "RCFD1752";
+
+	codici[268] = "RCON1752";
+
+	
+		
+	
+	
+
+
+
+
+
+numcodici = 10; #è il numero dei codici da cercare. Va aggiornato se si aggiungono codici
+
+for(n=1; n<=numcodici; n++) colonnecodici[n] = 0; #inizializzo il vettore colonnecodici a 0 . se un codice non viene trovato nel primo record il corrispettivo valore di colonnecodici[indicecodicenontrovato] è 0
+  
+codtrov=0; # serve a contare il numero di codici trovati nel primo record
+offsetline=0; #serve a shiftare verso il basso matrix nel caso in cui la seconda linea non sia da trascurare
+
+}             
+
+# cerca i codici elencati in codici[] nel primo record , se li trova annota il numero del field(colonna) corrispondente in colonnecodici[] e aumenta di uno codtrov.
+(NR==1){for(l=1; l<=numcodici; l++){
+				for(j=0; j<=NF; j++){
+							if(codici[l]==$j) {colonnecodici[l]=j; codtrov++;}
+														
+ 						    }
+			     }
+
+	}
+#controllo se la seconda linea contiene numeri o testo 
+(NR==2){if($1 !=""){ 
+			offsetline=1;	
+			for(m=1; m<=numcodici; m++){matrix[NR + offsetline][m]="NaN";}  
+			for(k=1;k<=numcodici; k++){if(colonnecodici[k]!=0 && $colonnecodici[k]!=""){matrix[NR + offsetline][k]=$colonnecodici[k];}
+     		 										   }   
+			
+		    }
+	}
+
+# annotati i numeri delle colonne di interesse in colonnecodici per ogni record (riga) copio i valori delle colonne corrispondenti nella matrice matrix[][] di dimensioni NR *  numcodici. copio anche le colonne corrispondenti a codici non trovati per avere matrici delle stesse dimensioni  pur processando files relativi a periodi diversi
+ciao

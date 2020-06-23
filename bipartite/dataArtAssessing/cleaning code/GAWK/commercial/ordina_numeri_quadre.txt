@@ -1,0 +1,32 @@
+BEGIN{
+       FS = "";   # ogni carattere è un record
+	offs=0;	
+	ind = 1;
+ultimariga = 635;
+}             
+
+
+(NR>=1){max_nr = NR; 
+	for(j=0; j<=NF; j++){ if(max_nf < NF){max_nf = NF; 	}
+				offs=0;
+				if($j !="[" ) {testo[NR][j+offs]=$j; }
+				else {	if(NR<=ultimariga){testo[NR][j+offs] ="["ind; ind++; offs=1;}
+					else{testo[NR][j+offs]=$j; }					
+					}
+														
+			     	}
+			    
+
+	}
+
+  END{ 									
+		for(s=1; s<=max_nr ; s++)	{
+					for(d=1; d<=max_nr; d++)printf(testo[s][d]);
+					printf("\n");
+				}	
+
+     }
+                  
+
+
+

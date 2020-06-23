@@ -1,0 +1,14 @@
+#Applica seleziona nomi a tutti i files necessari
+
+
+
+for fold in /home/domenico/Dropbox/Data_reservoir/Commercial_banks_U_S/folders/F*;
+	do
+	for file in "$fold"/FFIEC\ CDR\ Call\ Bulk*;
+		do
+			gawk -f selezcodici_nomi_gawk_domenico.txt "$file" > /home/domenico/Dropbox/Tesi_Systemic_Risk/data/COM_data/banks_names/"$(basename "$fold").txt"
+
+		done
+	done
+
+

@@ -1,0 +1,6 @@
+#applica selezcodicigawk a tutti i file .txt in /home/domenico/Dropbox/Tesi_Systemic_Risk/data/2001-2013/ e stampa gli output nella cartella /home/domenico/Dropbox/Tesi_Systemic_Risk/data/sorted2001-2013/
+
+for file in /home/domenico/Dropbox/Tesi_Systemic_Risk/data/BHC_data/2001-2013/*.txt;
+do
+    gawk -f selezcodicigawk_bhc_domenico.txt "$file" >/home/domenico/Dropbox/Tesi_Systemic_Risk/data/BHC_data/sorted2001-2013/"$(basename "$file")_sorted.txt"
+done

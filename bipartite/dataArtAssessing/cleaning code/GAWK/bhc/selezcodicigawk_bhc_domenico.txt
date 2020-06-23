@@ -1,0 +1,583 @@
+#/*programma gawk che restituisce  un file testo gestibile con matlab contenente le colonne relative ai codici elencati
+
+
+BEGIN{
+       FS = "^";   # imposto ^ come field separator 
+       
+#/*elenco i codici da cercare commentandoli con le rispettive descrizioni contenute in sample_dictionary.xlsx
+ 
+ 				#assets Total Assets assets  
+
+	codici[1]="BHCK2170"; #/6/30/1981	12/31/9999	TOTAL ASSETS
+
+       
+				#equity_tot Total Equity Capital
+
+	codici[2]="BHCKG105"; #3/31/2009	12/31/9999	TOTAL EQUITY CAPITAL INCLUDING NONCONTROLLING MINORITY INTERESTS IN CONSOLIDATED SUBSIDIARIES
+
+	codici[3]="BHCK3210"; #6/30/1986	12/31/9999	TOTAL EQUITY CAPITAL in Duarte viene indicato con BHCK3201 che non esiste . suppongo sia un errore e che il codice corretto sia BHCK3210 la cui descrizione è : The sum of "Perpetual Preferred Stock and Related Surplus (3838)", "Common Stock (3230)", "Surplus (3839)", "Undivided Profits and Capital Reserves (3632)", "Cumulative Foreign Currency Translation Adjustments (3284)" less "Net Unrealized Loss on Marketable Equity Securities (0297)".
+
+              			# cashibb Cash and Balances due from depository institutions */
+        
+        codici[4]="BHCK0081"; #6/30/1981	12/31/9999	NONINTEREST-BEARING BALANCES AND CURRENCY AND COIN
+        codici[5]="BHCK0395"; #6/30/1981	12/31/9999	INTEREST-BEARING BALANCES IN U.S. OFFICES
+        codici[6]="BHCK0397"; #6/30/1981	12/31/9999	INTEREST-BEARING BALANCES IN FOREIGN OFFICES, EDGE AND AGREEMENT SUBSIDIARIES AND IBFS
+
+
+				#/* 'U.S. Treasury Securities' ust_sec  */	
+	
+	codici[7]="BHCK0211";  #/*3/31/1994	12/31/9999	AMORTIZED COST OF HELD-TO-MATURITY U.S. TREASURY SECURITIES*/
+	codici[8]="BHCK1287";  #/*3/31/1994	12/31/9999	FAIR VALUE OF AVAILABLE-FOR-SALE U.S. TREASURY SECURITIES */
+	codici[9]="BHCK0400"; #/*6/30/1981	12/31/1993	U.S. TREASURY SECURITIES - BOOK VALUE (EXCLUDING TRADING ACCOUNTS)*/
+
+
+	
+             			#/*agency_sec U.S. Agency Securities*/
+
+  	codici[10]="BHCK1289"; #/*3/31/1994	12/31/9999	AMORTIZED COST OF HELD-TO-MATURITY U.S. GOVERNMENT AGENCY AND CORPORATION OBLIGATIONS ISSUED BY U.S. GOVERNMENT AGENCIES (EXCLUDING MORTGAGE-BACKED SECURITIES)
+
+	codici[11]="BHCK1294"; #/*3/31/1994	12/31/9999	AMORTIZED COST OF HELD-TO-MATURITY U.S. GOVERNMENT AGENCY AND CORPORATION OBLIGATIONS ISSUED BY U.S. GOVERNMENT- SPONSORED AGENCIES (EXCLUDING MORTGAGE-BACKED SECURITIES)
+
+	codici[12]="BHCK1293"; #/*3/31/1994	12/31/9999	FAIR VALUE OF AVAILABLE-FOR-SALE U.S. GOVERNMENT AGENCY AND CORPORATION OBLIGATIONS ISSUED BY U.S. GOVERNMENT AGENCIES (EXCLUDING MORTGAGE-BACKED SECURITIES)
+
+	codici[13]="BHCK1298"; #/*3/31/1994	12/31/9999	FAIR VALUE OF AVAILABLE-FOR-SALE U.S. GOVERNMENT AGENCY AND CORPORATION OBLIGATIONS ISSUED BY U.S. GOVERNMENT- SPONSORED AGENCIES (EXCLUDING MORTGAGE-BACKED SECURITIES)
+
+    	codici[14]="BHCK0600"; #/*6/30/1981	12/31/1993	U.S. GOVERNMENT AGENCY AND CORPORATION OBLIGATIONS - BOOK VALUE (EXCLUDING TRADING ACCOUNTS)
+
+	codici[15]="BHCK8492"; #/*3/31/1994	12/31/2000	AMORTIZED COST OF HELD-TO-MATURITY U.S. GOVERNMENT AGENCY AND CORPORATION OBLIGATIONS (EXCLUDE MORTGAGE-BACKED SECURITIES)
+
+	codici[16]="BHCK8495"; #/*3/31/1994	12/31/2000	FAIR VALUE OF AVAILABLE-FOR-SALE U.S. GOVERNMENT AGENCY AND CORPORATION OBLIGATIONS (EXCLUDE MORTGAGE-BACKED SECURITIES)
+
+
+ 
+				#/*state_sec Securities issued by State/local governments*/
+
+	codici[17]="BHCK8496"; #/*3/31/2001	12/31/9999	AMORTIZED COST OF HELD-TO-MATURITY SECURITIES ISSUED BY STATES AND POLITICAL SUBDIVISIONS IN THE U.S.
+
+	codici[18]="BHCK8499"; #/*3/31/2001	12/31/9999	FAIR VALUE OF AVAILABLE-FOR-SALE SECURITIES ISSUED BY STATES AND POLITICAL SUBDIVISIONS IN THE U.S.
+
+	codici[19]="BHCK8531"; #/*3/31/1994	12/31/2000	AMORTIZED COST OF HELD-TO-MATURITY TAXABLE SECURITIES ISSUED BY STATES AND POLITICAL SUBDIVISIONS IN THE U.S.
+
+
+	codici[20]="BHCK8534"; #/*3/31/1994	12/31/2000	FAIR VALUE OF AVAILABLE-FOR-SALE TAXABLE SECURITIES ISSUED BY STATES AND POLITICAL SUBDIVISIONS IN THE U.S.
+
+	codici[21]="BHCK8535"; #/*3/31/1994	12/31/2000	AMORTIZED COST OF HELD-TO-MATURITY TAX-EXEMPT SECURITIES ISSUED BY STATES AND POLITICAL SUBDIVISIONS IN THE U.S.
+
+	codici[22]="BHCK8538"; #/*3/31/1994	12/31/2000	FAIR VALUE OF AVAILABLE-FOR-SALE TAX-EXEMPT SECURITIES ISSUED BY STATES AND POLITICAL SUBDIVISIONS IN THE U.S.
+
+
+			
+
+				#/* mbs Mortgage Backed Securities */  /*after 06/2009 mbs_res+mbs_com*/
+
+
+
+	codici[23]="BHCK1698"; #/*3/31/1994	3/31/2009	AMORTIZED COST OF HELD-TO-MATURITY MORTGAGE PASS-THROUGH SECURITIES GUARANTEED BY GNMA
+
+	codici[24]="BHCK1702"; #/*3/31/1994	3/31/2009	FAIR VALUE OF AVAILABLE-FOR-SALE MORTGAGE PASS-THROUGH SECURITIES GUARANTEED BY GNMA
+
+	codici[25]="BHCK1703"; #/*3/31/1994	3/31/2009	AMORTIZED COST OF HELD-TO-MATURITY MORTGAGE PASS-THROUGH SECURITIES ISSUED BY FNMA AND FHLMC
+
+	codici[26]="BHCK1707"; #/*3/31/1994	3/31/2009	FAIR VALUE OF AVAILABLE-FOR-SALE MORTGAGE PASS-THROUGH SECURITIES ISSUED BY FNMA AND FHLMC
+	
+	codici[27]="BHCK1709"; #/*3/31/1994	3/31/2009	AMORTIZED COST OF OTHER HELD-TO-MATURITY PASS-THROUGH SECURITIES
+	codici[28]="BHCK1713"; #/*3/31/1994	3/31/2009	FAIR VALUE OF OTHER AVAILABLE-FOR-SALE PASS-THROUGH SECURITIES*/
+	codici[29]="BHCK1714"; #/*3/31/1994	3/31/2009	AMORTIZED COST OF OTHER HELD-TO-MATURITY MORTGAGE-BACKED SECURITIES (INCLUDE CMOS, REMICS, AND STRIPPED MBS) ISSUED OR GUARANTEED BY FNMA, FHLMC, OR GNMA
+
+	codici[30]="BHCK1717"; #/*3/31/1994	3/31/2009	FAIR VALUE OF OTHER AVAILABLE-FOR-SALE MORTGAGE-BACKED SECURITIES (INCLUDE CMOS, REMICS, AND STRIPPED MBS) ISSUED OR GUARANTEED BY FNMA, FHLMC, OR GNMA
+
+	codici[31]="BHCK1718"; #/*3/31/1994	3/31/2009	AMORTIZED COST OF OTHER HELD-TO-MATURITY MORTGAGE-BACKED SECURITIES (INCLUDE CMOS, REMICS AND STRIPPED MBS) COLLATERALIZED BY MBS ISSUED OR GUARANTEED BY FNMA, FHLMC, OR GNMA
+
+	codici[32]="BHCK1732"; #/*3/31/1994	3/31/2009	FAIR VALUE OF OTHER AVAILABLE-FOR-SALE MORTGAGE-BACKED SECURITIES (INCLUDE CMOS, REMICS AND STRIPPED MBS) COLLATERALIZED BY MBS ISSUED OR GUARANTEED BY FNMA, FHLMC, OR GNMA
+
+	codici[33]="BHCK1733"; #/*3/31/1994	3/31/2009	AMORTIZED COST OF ALL OTHER HELD-TO-MATURITY MORTGAGE-BACKED SECURITIES (INCLUDE CMOS, REMICS, AND STRIPPED MBS)
+
+	codici[34]="BHCK1736"; #/*3/31/1994	3/31/2009	FAIR VALUE OF ALL OTHER AVAILABLE-FOR-SALE MORTGAGE BACKED SECURITIES (MBA) (INCLUDE CMOS, REMICS, AND STRIPPED MBS)
+
+
+
+
+				#/*mbs_res Residential Mortgage Backed Securities*/
+	codici[35]="BHCKG300"; #/*6/30/2009	12/31/9999	MORTGAGE-BACKED SECURITIES (MBS): RESIDENTIAL PASS-THROUGH SECURITIES: GUARANTEED BY GNMA: HELD-TO-MATURITY AMORTIZED COST
+
+	codici[36]="BHCKG303"; #/*6/30/2009	12/31/9999	MORTGAGE-BACKED SECURITIES (MBS): RESIDENTIAL PASS-THROUGH SECURITIES: GUARANTEED BY GNMA: AVAILABLE-FOR-SALE FAIR VALUE
+
+	codici[37]="BHCKG304"; #/*6/30/2009	12/31/9999	MORTGAGE-BACKED SECURITIES (MBS): RESIDENTIAL PASS-THROUGH SECURITIES: ISSUED BY FNMA AND FHLMC: HELD-TO-MATURITY AMORTIZED COST
+
+	codici[38]="BHCKG307"; #/*6/30/2009	12/31/9999	MORTGAGE-BACKED SECURITIES (MBS): RESIDENTIAL PASS-THROUGH SECURITIES: ISSUED BY FNMA AND FHLMC: AVAILABLE-FOR-SALE FAIR VALUE
+
+	codici[39]="BHCKG308"; #/*6/30/2009	12/31/9999	MORTGAGE-BACKED SECURITIES (MBS): RESIDENTIAL PASS-THROUGH SECURITIES: OTHER PASS-THROUGH SECURITIES: HELD-TO-MATURITY AMORTIZED COST
+
+	codici[40]="BHCKG311"; #/*6/30/2009	12/31/9999	MORTGAGE-BACKED SECURITIES (MBS): RESIDENTIAL PASS-THROUGH SECURITIES: OTHER PASS-THROUGH SECURITIES: AVAILABLE-FOR-SALE FAIR VALUE
+
+	codici[41]="BHCKG312"; #/*6/30/2009	12/31/9999	MORTGAGE-BACKED SECURITIES (MBS): OTHER RESIDENTIAL MBS (INCLUDE CMOS, REMICS, AND STRIPPED MBS): ISSUED OR GUARANTEED BY FNMA, FHLMC, OR GNMA - HELD-TO-MATURITY AMORTIZED COST
+
+	codici[42]="BHCKG315"; #/*6/30/2009	12/31/9999	MORTGAGE-BACKED SECURITIES (MBS): OTHER RESIDENTIAL MBS (INCLUDE CMOS, REMICS, AND STRIPPED MBS): ISSUED OR GUARANTEED BY FNMA, FHLMC, OR GNMA - AVAILABLE-FOR-SALE FAIR VALUE
+
+	codici[43]="BHCKG316"; #/*6/30/2009	12/31/9999	MORTGAGE-BACKED SECURITIES (MBS): OTHER RESIDENTIAL MBS (INCLUDE CMOS, REMICS, AND STRIPPED MBS): COLLATERALIZED BY MBS ISSUED OR GUARANTEED BY FNMA, FHLMC, OR GNMA - HELD-TO-MATURITY AMORTIZED COST
+
+	codici[44]="BHCKG319"; #/*6/30/2009	12/31/9999	MORTGAGE-BACKED SECURITIES (MBS): OTHER RESIDENTIAL MBS (INCLUDE CMOS, REMICS, AND STRIPPED MBS): COLLATERALIZED BY MBS ISSUED OR GUARANTEED BY FNMA, FHLMC, OR GNMA - AVAILABLE-FOR-SALE FAIR VALUE
+
+	codici[45]="BHCKG320"; #/*6/30/2009	12/31/9999	MORTGAGE-BACKED SECURITIES (MBS): OTHER RESIDENTIAL MBS (INCLUDE CMOS, REMICS, AND STRIPPED MBS): ALL OTHER RESIDENTIAL MBS - HELD-TO-MATURITY AMORTIZED COST
+
+	codici[46]="BHCKG323"; #/*6/30/2009	12/31/9999	MORTGAGE-BACKED SECURITIES (MBS): OTHER RESIDENTIAL MBS (INCLUDE CMOS, REMICS, AND STRIPPED MBS): ALL OTHER RESIDENTIAL MBS - AVAILABLE-FOR-SALE FAIR VALUE
+
+
+
+				#/*mbs_com Commercial Mortgage Backed Securities*/
+	codici[47]="BHCKK142"; #/*3/31/2011	12/31/9999	MORTGAGE-BACKED SECURITIES (MBS):COMMERCIAL MBS: COMMERCIAL MORTGAGE PASS-THROUGH SECURITIES: ISSUED OR GUARANTEED BY FNMA,FHLMC OR GNMA: HELD-TO-MATURITY AMORTIZED COST
+
+	codici[48]="BHCKK146"; #/*3/31/2011	12/31/9999	MORTGAGE-BACKED SECURITIES (MBS):COMMERCIAL MBS: COMMERCIAL MORTGAGE PASS-THROUGH SECURITIES:OTHER PASS THROUGH SECURITIES : HELD-TO-ATURITY AMORTIZED COST
+
+	codici[49]="BHCKK145"; #/*3/31/2011	12/31/9999	MORTGAGE-BACKED SECURITIES (MBS):COMMERCIAL MBS: COMMERCIAL MORTGAGE PASS-THROUGH SECURITIES:ISSUED OR GUARANTEED BY FNMA,FHLMC OR GNMA: AVAILABLE-FOR-SALE FAIR VALUE
+
+	codici[50]="BHCKK149"; #/*3/31/2011	12/31/9999	MORTGAGE-BACKED SECURITIES (MBS):COMMERCIAL MBS: COMMERCIAL MORTGAGE PASS-THROUGH SECURITIES:OTHER PASS THROUGH SECURITIES : AVAILABLE-FOR-SALE FAIR VALUE
+
+	codici[51]="BHCKK150"; #/*3/31/2011	12/31/9999	MORTGAGE-BACKED SECURITIES (MBS):COMMERCIAL MBS: OTHER COMMERCIAL MBS :ISSUED OR GUARANTEED BY FNMA,FHLMC OR GNMA: HELD-TO-MATURITY AMORTIZED COST
+
+	codici[52]="BHCKK154"; #/*3/31/2011	12/31/9999	MORTGAGE-BACKED SECURITIES (MBS):COMMERCIAL MBS: OTHER COMMERCIAL MBS :ALL OTHER COMMERCIAL MBS : HELD-TO-MATURITY AMORTIZED COST
+
+
+	codici[53]="BHCKK153"; #/*3/31/2011	12/31/9999	MORTGAGE-BACKED SECURITIES (MBS):COMMERCIAL MBS: OTHER COMMERCIAL MBS :ISSUED OR GUARANTEED BY FNMA,FHLMC OR GNMA: AVAILABLE-FOR-SALE FAIR VALUE
+
+	codici[54]="BHCKK157"; #/*3/31/2011	12/31/9999	MORTGAGE-BACKED SECURITIES (MBS):COMMERCIAL MBS: OTHER COMMERCIAL MBS :ALL OTHER COMMERCIAL MBS: AVAILABLE-FOR-SALE FAIR VALUE
+
+	codici[55]="BHCKG324"; #/*6/30/2009	12/31/2010	MORTGAGE-BACKED SECURITIES (MBS): COMMERCIAL MORTGAGE-BACKED SECURITIES (MBS): COMMERCIAL PASS-THROUGH SECURITIES - HELD-TO-MATURITY AMORTIZED COST
+
+	codici[56]="BHCKG327"; #/*6/30/2009	12/31/2010	MORTGAGE-BACKED SECURITIES (MBS): COMMERCIAL MORTGAGE-BACKED SECURITIES (MBS): COMMERCIAL PASS-THROUGH SECURITIES - AVAILABLE-FOR-SALE FAIR VALUE
+
+	codici[57]="BHCKG328"; #/*6/30/2009	12/31/2010	MORTGAGE-BACKED SECURITIES (MBS): COMMERCIAL MORTGAGE-BACKED SECURITIES (MBS): OTHER COMMERCIAL MBS - HELD-TO-MATURITY AMORTIZED COST
+
+	codici[58]="BHCKG331";# /*6/30/2009	12/31/2010	MORTGAGE-BACKED SECURITIES (MBS): COMMERCIAL MORTGAGE-BACKED SECURITIES (MBS): OTHER COMMERCIAL MBS - AVAILABLE-FOR-SALE FAIR VALUE
+
+
+
+				#/*abs Asset Backed Securities */
+	codici[59]="BHCKC026"; #/*3/31/2006	12/31/9999	TOTAL (ASSET-BACKED SECURITIES) AMORTIZED COST - HELD TO MATURITY
+
+	codici[60]="BHCKG336"; #/*6/30/2009	12/31/9999	ASSET-BACKED SECURITIES AND STRUCTURED FINANCIAL PRODUCTS: STRUCTURED FINANCIAL PRODUCTS: CASH - HELD-TO-MATURITY AMORTIZED COST
+
+	codici[61]="BHCKG340"; #/*6/30/2009	12/31/9999	ASSET-BACKED SECURITIES AND STRUCTURED FINANCIAL PRODUCTS: STRUCTURED FINANCIAL PRODUCTS: SYNTHETIC - HELD-TO-MATURITY AMORTIZED COST
+
+	codici[62]="BHCKG344"; #/*6/30/2009	12/31/9999	ASSET-BACKED SECURITIES AND STRUCTURED FINANCIAL PRODUCTS: STRUCTURED FINANCIAL PRODUCTS: HYBRID - HELD-TO-MATURITY AMORTIZED COST
+
+	codici[63]="BHCKC027"; #/*3/31/2006	12/31/9999	TOTAL (ASSET-BACKED SECURITIES) FAIR VALUE - AVAILABLE-FOR-SALE
+
+	codici[64]="BHCKG339"; #/*6/30/2009	12/31/9999	ASSET-BACKED SECURITIES AND STRUCTURED FINANCIAL PRODUCTS: STRUCTURED FINANCIAL PRODUCTS: CASH - AVAILABLE-FOR-SALE FAIR VALUE
+
+	codici[65]="BHCKG343"; #/*6/30/2009	12/31/9999	ASSET-BACKED SECURITIES AND STRUCTURED FINANCIAL PRODUCTS: STRUCTURED FINANCIAL PRODUCTS: SYNTHETIC - AVAILABLE-FOR-SALE FAIR VALUE
+
+	codici[66]="BHCKG347"; #/*6/30/2009	12/31/9999	ASSET-BACKED SECURITIES AND STRUCTURED FINANCIAL PRODUCTS: STRUCTURED FINANCIAL PRODUCTS: HYBRID - AVAILABLE-FOR-SALE FAIR VALUE
+
+	codici[67]="BHCKB838"; #/*3/31/2001	12/31/9999	AMORTIZED COST OF HELD-TO-MATURITY ASSET-BACKED SECURITIES: CREDIT CARD RECEIVABLES
+
+	codici[68]="BHCKB841"; #/*3/31/2001	12/31/9999	FAIR VALUE OF AVAILABLE-FOR-SALE ASSET-BACKED SECURITIES: CREDIT CARD RECEIVABLES
+
+	codici[69]="BHCKB842"; #/*3/31/2001	12/31/9999	AMORTIZED COST OF HELD-TO-MATURITY ASSET-BACKED SECURITIES: HOME EQUITY LINES
+
+	codici[70]="BHCKB845"; #/*3/31/2001	12/31/9999	FAIR VALUE OF AVAILABLE-FOR-SALE ASSET-BACKED SECURITIES: HOME EQUITY LINES
+
+	codici[71]="BHCKB846"; #/*3/31/2001	12/31/9999	AMORTIZED COST OF HELD-TO-MATURITY ASSET-BACKED SECURITIES: AUTO LOANS
+
+	codici[72]="BHCKB849"; #/*3/31/2001	12/31/9999	FAIR VALUE OF AVAILABLE-FOR-SALE ASSET-BACKED SECURITIES: AUTO LOANS
+
+	codici[73]="BHCKB850"; #/*3/31/2001	12/31/9999	AMORTIZED COST OF HELD-TO-MATURITY ASSET-BACKED SECURITIES: OTHER CONSUMER LOANS
+
+	codici[74]="BHCKB853"; #/*3/31/2001	12/31/9999	FAIR VALUE OF AVAILABLE-FOR-SALE ASSET-BACKED SECURITIES: OTHER CONSUMER LOANS
+
+	codici[75]="BHCKB854"; #/*3/31/2001	12/31/9999	AMORTIZED COST OF HELD-TO-MATURITY ASSET-BACKED SECURITIES: COMMERCIAL AND INDUSTRIAL LOANS
+
+	codici[76]="BHCKB857"; #/*3/31/2001	12/31/9999	FAIR VALUE OF AVAILABLE-FOR-SALE ASSET-BACKED SECURITIES: COMMERCIAL AND INDUSTRIAL LOANS
+
+	codici[77]="BHCKB858"; #/*3/31/2001	12/31/9999	AMORTIZED COST OF HELD-TO-MATURITY ASSET-BACKED SECURITIES: OTHER
+
+	codici[78]="BHCKB861"; #/*3/31/2001	12/31/9999	FAIR VALUE OF AVAILABLE-FOR-SALE ASSET-BACKED SECURITIES: OTHER
+
+
+
+
+
+				#/*dom_debt_oth_sec  Other Domestic Debt Securities*/
+
+	codici[79]="BHCK1737"; #/*3/31/2001	12/31/9999	AMORTIZED COST OF OTHER HELD-TO-MATURITY DOMESTIC DEBT SECURITIES
+	codici[80]="BHCK1741"; #/*3/31/2001	12/31/9999	FAIR VALUE OF OTHER AVAILABLE-FOR-SALE DOMESTIC DEBT SECURITIES
+
+
+				#/*for_debt_sec Foreign Debt Securities*/
+	codici[81]="BHCK1742"; #/*3/31/2001	12/31/9999	AMORTIZED COST OF HELD-TO-MATURITY FOREIGN DEBT SECURITIES
+
+	codici[82]="BHCK1746"; #/*3/31/2001	12/31/9999	FAIR VALUE OF AVAILABLE-FOR-SALE FOREIGN DEBT SECURITIES
+
+
+				#/*res_sec Residual Securites*/ /*da sottrarre govt_sec state_sec mbs abs dom_debt_oth_sec for_debt_sec*/
+
+	codici[83]="BHCK1754"; #/*3/31/1994	12/31/9999	HELD-TO-MATURITY SECURITIES, TOTAL
+
+	codici[84]="BHCK1773"; #/*3/31/1994	12/31/9999	AVAILABLE-FOR-SALE SECURITIES, TOTAL
+
+
+            			#/*ffrepo_ass FF Sold &Securities Purhcased under Agreements to Resell (asset) */
+	codici[85]="BHDMB987"; #/*3/31/2002	12/31/9999	FEDERAL FUNDS SOLD IN DOMESTIC OFFICES
+
+	codici[86]="BHCKB989"; #/*3/31/2002	12/31/9999	SECURITIES PURCHASED UNDER AGREEMENTS TO RESELL
+
+	codici[87]="BHCK1350"; #/*6/30/1981	3/31/1988	FEDERAL FUNDS SOLD AND SECURITIES PURCHASED UNDER AGREEMENTS TO RESELL IN DOMESTIC OFFICES OF THE BANK AND OF ITS EDGE AND AGREEMENT SUBSIDIARIES, AND IN IBFS
+
+	codici[88]="BHCK0276"; #/*6/30/1988	12/31/1996	FEDERAL FUNDS SOLD
+
+	codici[89]="BHCK0277"; #/*6/30/1988	12/31/1996	SECURITIES PURCHASED UNDER AGREEMENTS TO RESELL
+
+	codici[90]="BHCK1350"; #/*1997-03-31 	2001-12-31	FEDERAL FUNDS SOLD AND SECURITIES PURCHASED UNDER AGREEMENTS TO RESELL IN DOMESTIC OFFICES OF THE BANK AND OF ITS EDGE AND AGREEMENT SUBSIDIARIES, AND IN IBFS
+
+			
+
+
+				#/*ln_re_dom Loans Secured by Real Estate in Domestic Offices*/ /*dato dalla somma di ln_rre+ln_const+ln_multi+ln_nfnr+ln_farm*/
+
+				
+
+
+				#/*ln_const Construction loans*/
+	
+	codici[91]="BHCKF158"; #/*3/31/2007	12/31/9999	LOANS SECURED BY 1-4 FAMILY RESIDENTIAL CONSTRUCTION
+
+	codici[92]="BHCKF159"; #/*3/31/2007	12/31/9999	LOANS SECURED BY OTHER CONSTRUCTION LOANS AND ALL LAND DEVELOPMENT AND OTHER LAND LOANS
+
+	codici[93]="BHDM1415"; #/*9/30/1990	12/31/2007	CONSTRUCTION AND LAND DEVELOPMENT LOANS
+
+
+
+				#/*ln_farm Loans Secured by Farmland*/
+
+	codici[94]="BHDM1420"; #/*9/30/1990	12/31/9999	REAL ESTATE LOANS SECURED BY FARMLAND
+
+
+
+
+				#/*ln_rre 1-4 Family Residential Real Estate (Domestic)*/
+
+	codici[95]="BHDM5367"; #/*3/31/1991	12/31/9999	ALL OTHER LOANS SECURED BY 1-4 FAMILY RESIDENTIAL PROPERTIES: SECURED BY FIRST LIENS
+
+	codici[96]="BHDM5368";# /*3/31/1991	12/31/9999	ALL OTHER LOANS SECURED BY 1-4 FAMILY RESIDENTIAL PROPERTIES: SECURED BY JUNIOR LIENS
+
+	codici[97]="BHDM1797"; #/*9/30/1990	12/31/9999	REVOLVING, OPEN-END LOANS SECURED BY 1-4 FAMILY RESIDENTIAL PROPERTIES AND EXTENDED UNDER LINES OF CREDIT
+
+
+
+				#/*ln_multi Multi-family property loans*/
+	codici[98]="BHDM1460"; #/*9/30/1990	12/31/9999	REAL ESTATE LOANS SECURED BY MULTI-FAMILY (5 OR MORE) RESIDENTIAL PROPERTIES
+
+
+
+				
+				#/*ln_nfnr Non-farm, nonres CRE loans*/
+	codici[99]="BHCKF160"; #/*3/31/2007	12/31/9999	LOANS SECURED BY OWNER OCCUPIED NONFARM NONRESIDENTIAL PROPERTIES
+
+	codici[100]="BHCKF161";# /*3/31/2007	12/31/9999	LOANS SECURED BY OTHER NONFARM NONRESIDENTIAL PROPERTIES.
+
+	codici[101]="BHDM1480"; #/*9/30/1990	12/31/2007	REAL ESTATE LOANS SECURED BY NONFARM NONRESIDENTIAL PROPERTIES
+
+
+
+
+				#/*ln_re_for Loans Secured by Real Estate in Foreign Offices*/ /*da sottarrre ln_re_dom*/
+
+	codici[102]="BHCK1410"; #/*6/30/1981	12/31/9999	LOANS SECURED BY REAL ESTATE
+
+
+
+
+				#/*ln_ci_dom C&I Loans Domestic*/
+
+	codici[103]="BHDM1766"; #/*6/30/1981	12/31/9999	COMMERCIAL AND INDUSTRIAL LOANS
+
+				
+				#/*ln_ci_for C&I Loans Foreign*/ /*da sottrarre ln_ci_dom*/
+
+	codici[104]="BHCK1763"; #/*6/30/1981	12/31/9999	COMMERCIAL AND INDUSTRIAL LOANS TO U.S. ADDRESSEES
+	codici[105]="BHCK1764"; #/*6/30/1986	12/31/9999	COMMERCIAL AND INDUSTRIAL LOANS TO NON-U.S. ADDRESSEES
+
+
+
+				#ln_cons_dom Loans to Consumers in Domestic Offices*/
+
+	codici[106]="BHDM1975"; #6/30/1981	12/31/9999	LOANS TO INDIVIDUALS FOR HOUSEHOLD, FAMILY, AND OTHER PERSONAL EXPENDITURES
+
+
+
+
+				#lns_cons_for Loans to consumers foreign*/ /*da sottrarre ln_cons_dom*/
+
+	codici[107]="BHCKB538"; #3/31/2001	12/31/9999	LOANS TO INDIVIDUALS FOR HOUSEHOLD, FAMILY, AND OTHER PERSONAL EXPENDITURES (I.E., CONSUMER LOANS)(INCLUDES PURCHASED PAPER): CREDIT CARDS
+	codici[108]="BHCKB539"; #3/31/2001	12/31/9999	LOANS TO INDIVIDUALS FOR HOUSEHOLD, FAMILY, AND OTHER PERSONAL EXPENDITURES (I.E., CONSUMER LOANS)(INCLUDES PURCHASED PAPER): OTHER REVOLVING CREDIT PLANS
+
+	codici[109]="BHCKK137"; #3/31/2011	12/31/9999	AUTOMOBILE LOANS TO INDIVIDUALS FOR HOUSEHOLD, FAMILY, AND OTHER PERSONAL EXPENDITURES (I.E., CONSUMERLOANS)(INCLUDES PURCHASED PAPER)
+
+	codici[110]="BHCKK207"; #3/31/2011	12/31/9999	OTHER CONSUMER LOANS TO INDIVIDUALS FOR HOUSEHOLD, FAMILY, AND OTHER PERSONAL EXPENDITURES (INCLUDES SINGLE PAYMENT, INSTALLMENT, AND ALL STUDENT LOANS)
+
+
+
+
+				#oth_loans Other Loans*/ /*da sottrarre  ln_re_dom-ln_re_for ln_cons_dom ln_cons_for ln_ci_dom ln_ci_for */
+
+	codici[111]="BHCK2122"; #6/30/1981 12/31/9999 TOTAL LOANS AND LEASES, NET OF UNEARNED INCOME			
+				#trade_ass Trading_Assets*/
+	codici[112]="BHCK3545"; #3/31/1995	12/31/9999	TRADING ASSETS, TOTAL
+				#oth_ass Other Assets*/ /*assets-cash_ibb-ffrepo_ass-BHCK1754-BHCK1773-trade_ass-BHCK2122*
+
+	codici[113]="BHCK2011"; # correzione aggiunta da me. va aggiunto per formare ln_cons_for. perche'?? non credo infatti lo rimuovo. SErve perchè comprende tutte gli other consumers loans
+
+
+			# codici aggiunti per dividere i trading assets
+
+
+
+	codici[114]="BHCK3531"; # trading US treasury securities in domestic office
+
+	codici[115]="BHCK3532"; #U.S. Government agency obligations in domestic offi ces (exclude mortgage-backed ecurities)
+
+	codici[116]="BHCK3533"; #Securities issued by states and political subdivisions in the U.S. in domestic offi ces
+	
+        codici[117]="BHCK3534"; #Mortgage-backed securities (MBS) in domestic offi ces: a. Pass-through securities issued or guaranteed by FNMA, FHLMC, or GNMA
+
+	codici[118]="BHCK3535"; #Mortgage-backed securities (MBS) in domestic offi ces: b. Other MBS issued or guaranteed by FNMA, FHLMC, or GNMA (include CMOs,REMICs, and stripped MBS)
+
+
+ 	codici[119]="BHCK3536"; #Mortgage-backed securities (MBS) in domestic offi ces: c All other mortgage-backed securities
+
+	codici[120]="BHCK3537"; #Other debt securities in domestic offi ces
+
+	codici[121]="BHCK3545"; #Total trading assets  CONSOLIDATED
+
+	codici[122]="BHCM3531"; #U.S. Treasury securities
+
+	codici[123]="BHCM3532"; #U.S. government agency obligations (exclude mortgage-backed securities)
+
+	codici[124]="BHCM3533"; #Securities issued by states and political subdivisions in the U.S
+
+	codici[125]="BHCKG379"; #Mortgage-backed securities (MBS): a. Residential pass-through securities issued or guaranteed by FNMA, FHLMC, or GNMA consolidated
+
+	codici[126]="BHCKG380"; #Mortgage-backed securities (MBS): b. Other residential mortgage-backed securities issued or guaranteed by U.S. Government agencies or sponsored agencies (include CMOs, REMICs, and stripped MBS) consolidated
+
+	codici[127]="BHCKG381"; #Mortgage-backed securities (MBS):c. All other residential mortgage-backed securities consolidated
+
+	codici[128]="BHCKK197"; #Mortgage-backed securities (MBS):d Commercial MBS issued or guaranteed by U.S. Government agencies or sponsored agencies consolidated
+
+	codici[129]="BHCKK198"; #Mortgage-backed securities (MBS): e. All other commercial MBS consolidated
+
+	codici[130]="BHCKG383"; #Other debt securities a. Structured financial products: (1) Cash
+
+	codici[131]="BHCKG384"; #Other debt securities a. Structured financial products: (2) Synthetic
+
+	codici[132]="BHCKG385"; #Other debt securities a. Structured financial products: (3) Hybrid
+
+	codici[133]="BHCKG386"; #Other debt securities b. All other debt securities
+
+	codici[134]="BHCKF610"; #Loans: a. Loans secured by real estate total CONSOLIDATED
+
+	codici[135]="BHDMF604"; #Loans: a. Loans secured by real estate DOMESTIC, (1) Construction, land development, and other land loans
+
+	codici[136]="BHDMF605"; #Loans: a. Loans secured by real estate DOMESTIC, (2) Secured by farmland (including farm residential and other improvements)
+
+	codici[137]="BHDMF606"; #Loans: a. Loans secured by real estate DOMESTIC, (3) Secured by 1–4 family residential properties:(a) Revolving, open-end loans secured by 1–4 family residential properties and extended under lines of credit
+
+	codici[138]="BHDMF607"; #Loans: a. Loans secured by real estate DOMESTIC, (3) Secured by 1–4 family residential properties:(b) Closed-end loans secured by 1–4 family residential properties: (i) Secured by first liens
+
+
+	codici[139]="BHDMF611"; #Loans: a. Loans secured by real estate DOMESTIC, (3) Secured by 1–4 family residential properties:(b) Closed-end loans secured by 1–4 family residential properties: (ii) Secured by junior liens
+
+
+	codici[140]="BHDMF612"; #Loans: a. Loans secured by real estate DOMESTIC,(4) Secured by multifamily (5 or more) residential properties
+
+
+
+	codici[141]="BHDMF613"; #Loans: a. Loans secured by real estate DOMESTIC, (5) Secured by nonfarm nonresidential properties
+
+	codici[142]="BHCKF614"; #Loans: b. Commercial and industrial loans CONSOLIDATED
+
+	codici[143]="BHDMF614"; #Loans: b. Commercial and industrial loans DOMESTIC
+
+	codici[144]="BHCKF615"; #Loans: c. CONSOLIDATED Loans to individuals for household, family, and other personal expenditure (i.e., consumer loans) (includes purchased paper): (1) Credit cards
+
+	codici[145]="BHDMF615"; #Loans: c. DOMESTIC Loans to individuals for household, family, and other personal expenditure (i.e., consumer loans) (includes purchased paper): (1) Credit cards
+
+
+	codici[146]="BHCKF616"; #Loans: c. CONSOLIDATED Loans to individuals for household, family, and other personal expenditure (i.e., consumer loans) (includes purchased paper): (2) Other revolving credit plans
+
+	codici[147]="BHDMF616"; #Loans: c. DOMESTIC Loans to individuals for household, family, and other personal expenditure (i.e., consumer loans) (includes purchased paper): (2) Other revolving credit plans
+
+	codici[148]="BHCKK199"; #Loans: c. CONSOLIDATED Loans to individuals for household, family, and other personal expenditure (i.e., consumer loans) (includes purchased paper): (3) Automobile loans
+
+	codici[149]="BHDMK199"; #Loans: c. DOMESTIC Loans to individuals for household, family, and other personal expenditure (i.e., consumer loans) (includes purchased paper): (3) Automobile loans
+
+	codici[150]="BHCKK210"; #Loans: c. DOMESTIC Loans to individuals for household, family, and other personal expenditure (i.e., consumer loans) (includes purchased paper): (4) Other consumer loans (includes single payment, installment, and all student loans)
+
+	codici[151]="BHDMK210"; #Loans: c. DOMESTIC Loans to individuals for household, family, and other personal expenditure (i.e., consumer loans) (includes purchased paper): (4) Other consumer loans (includes single payment, installment, and all student loans)
+
+	 codici[152]="BHCKF618"; #Loans: d. CONSOLIDATED  Other loans
+
+	codici[153]="BHDMF618"; #Loans: d. DOMESTIC  Other loans
+
+
+	codici[154]="BHCM3543"; #Derivatives with a positive fair value CONSOLIDATED
+
+	codici[155]="BHCK3543"; #Derivatives with a positive fair value DOMESTIC
+
+	codici[156]="BHDM3545"; #Total trading assets  DOMESTIC
+
+	codici[157]="BHCK2123"; #LESS: Any unearned income on loans refl ected in items 1 –9 above  CONSOLIDATED
+
+	codici[158]="BHDM2123"; #LESS: Any unearned income on loans refl ected in items 1 –9 above  DOMESTIC
+
+	codici[159]="BHCKB529"; #Loans and leases, net of unearned income and allowance for loan and lease losses (item 4.b minus 4.c)
+
+       codici[160]="BHCK2948"; #Total liabilities
+
+	codici[161]="BHCK3000"; #Minority interest in consolidated subsidiaries and similar items.
+
+	codici[162]="BHCK3300"; #Total liabilities, minority interest, and equity capita
+
+	codici[163]="BHCK3283"; #Perpetual preferred stock and related surplus
+
+	codici[164]="BHCK3230"; #Common stock (par value)
+
+
+	codici[165]="BHCK3240"; #Surplus (exclude all surplus related to preferred stock)
+
+	codici[166]="BHCK3247"; # a. Retained earnings
+
+	codici[167]="BHCKB530"; # b. Accumulated other comprehensive income
+
+	codici[168]="BHCKA130"; #Other equity capital components	
+
+	codici[169]="BHCKA511"; # Investments in mutual funds and other equity securities with readily determinable fair values
+
+	codici[170]="BHCK2145"; # Premises and fi xed assets (including capitalized leases
+
+	codici[171]="BHCK2150"; # Other real estate owned (from Schedule HC-M)
+
+	codici[172]="BHCK2130"; # Investments in unconsolidated subsidiaries and associated companies
+
+	codici[173]="BHCK2155"; # Customers’ liability on acceptances outstanding
+
+	codici[174]="BHCK3163"; # Intangible assets: a. Goodwill
+
+	codici[175]="BHCK0426"; # Intangible assets: b. Other intangible assets (from Schedule HC-M)
+
+	codici[176]="BHCK2160"; # Other assets (from Schedule HC-F)
+
+
+	codici[177]="BHCK5369"; # Loans and leases held for sale
+
+	codici[178]="BHCKB528"; # Loans and leases, net of unearned income
+
+	codici[179]="BHCK3123"; # LESS: Allowance for loan and lease losses
+
+	codici[180]="BHCKB529"; # Loans and leases, net of unearned income and allowance for loan and lease losses (item 4.b minus 4.c)
+
+	codici[181]="BHCK3656"; # DIRECT AND INDIRECT INVESTMENTS IN REAL ESTATE VENTURES
+
+				#Other Assets
+
+	codici[182]="BHCKB556"; # Accrued interest receivable
+
+	codici[183]="BHCK2148"; # Net deferred tax assets
+
+	codici[184]="BHCKA519"; #Interest-only strips receivable (not in the form of a security) 2 on: a. Mortgage loans
+
+	codici[185]="BHCKA520"; #Interest-only strips receivable (not in the form of a security) 2 on: b. Other fi nancial assets
+
+	codici[186]="BHCK1752"; # Equity securities that do not have readily determinable fair values
+
+	codici[187]="BHCK2168"; #Other ASSETS
+
+	codici[188]="BHCK2081"; #LOANS TO FOREIGN GOVERNMENTS AND OFFICIAL INSTITUTIONS
+
+	codici[189]="BHCK1545"; #LOANS FOR PURCHASING OR CARRYING SECURITIES
+
+	codici[190]="BHCKF162"; #LEASES TO INDIVIDUALS FOR HOUSEHOLD, FAMILY, AND OTHER PERSONAL EXPENDITURES (I.E. CONSUMER LEASES)
+
+	codici[191]="BHCKF163"; #ALL OTHER LEASE FINANCING RECEIVABLES
+
+	codici[192]="BHCK2182"; #LEASE FINANCING RECEIVABLES (NET OF UNEARNED INCOME) OF U.S. ADDRESSEES (DOMICILE)
+
+	codici[193]="BHCK2183"; #LEASE FINANCING RECEIVABLES (NET OF UNEARNED INCOME) OF NON-U.S. ADDRESSEES (DOMICILE)
+	
+	codici[194]="BHDMG379"; #Mortgage-backed securities (MBS): a. Residential pass-through securities issued or guaranteed by FNMA, FHLMC, or GNMA domestic
+
+	codici[195]="BHDMG380"; #Mortgage-backed securities (MBS): b. Other residential mortgage-backed securities issued or guaranteed by U.S. Government agencies or sponsored agencies (include CMOs, REMICs, and stripped MBS) domestic
+
+	codici[196]="BHDMG381"; #Mortgage-backed securities (MBS):c. All other residential mortgage-backed securities domestic
+
+	codici[197]="BHDMK197"; #Mortgage-backed securities (MBS):d Commercial MBS issued or guaranteed by U.S. Government agencies or sponsored agencies domestic
+
+	codici[198]="BHDMK198"; #Mortgage-backed securities (MBS): e. All other commercial MBS domestic
+	
+	codici[199]="BHDMG383"; #Other debt securities a. Structured financial products: (1) Cash
+
+	codici[200]="BHDMG384"; #Other debt securities a. Structured financial products: (2) Synthetic
+
+	codici[201]="BHDMG385"; #Other debt securities a. Structured financial products: (3) Hybrid
+
+	codici[202]="BHDMG386"; #Other debt securities b. All other debt securities
+
+	codici[203]="BHDMG382"; #TRADING ASSETS MORTGAGE-BACKED SECURITIES: COMMERCIAL
+
+	codici[204]="BHCK1635"; #other loans
+	
+	codici[205]="BHCK1292";
+	
+	codici[206]="BHCK1296";
+
+	codici[207]="BHDM1298";
+	
+
+	codici[208]="BHCK1590"; #Agricultural loans
+
+
+
+
+
+
+numcodici = 208; #è il numero dei codici da cercare. Va aggiornato se si aggiungono codici
+
+for(n=1; n<=numcodici; n++) colonnecodici[n] = 0; #inizializzo il vettore colonnecodici a 0 . se un codice non viene trovato nel primo record il corrispettivo valore di colonnecodici[indicecodicenontrovato] è 0
+  
+codtrov=0;# serve a contare il numero di codici trovati nel primo record
+
+
+}             
+
+# cerca i codici elencati in codici[] nel primo record , se li trova annota il numero del field(colonna) corrispondente in colonnecodici[] e aumenta di uno codtrov.
+(NR==1){for(l=1; l<=numcodici; l++){
+				for(j=0; j<=NF; j++){
+							if(codici[l]==$j) {colonnecodici[l]=j; codtrov++;}
+														
+ 						    }
+			     }
+
+	}
+
+# annotati i numeri delle colonne di interesse in colonnecodici per ogni record (riga) copio i valori delle colonne corrispondenti nella matrice matrix[][] di dimensioni NR *  numcodici. copio anche le colonne corrispondenti a codici non trovati per avere matrici delle stesse dimensioni  pur processando files relativi a periodi diversi
+
+(NR != 2){	matrix[NR][1]=$1; #aggiungo la colonna con i nomi delle firme
+		for(m=2; m<=numcodici+1; m++){matrix[NR][m]="NaN";}  
+		for(k=1;k<=numcodici; k++){if(colonnecodici[k]!=0 && $colonnecodici[k]!=""){matrix[NR][k+1]=$colonnecodici[k];}
+     		 }
+	}
+        
+  END{ 				
+#stampa una prima riga con tutti i codici
+printf("RSSD9001 ")
+for(d=1; d<=numcodici+1; d++)printf(codici[d] " ")
+					printf("\n")
+					
+		for(s=1; s<=NR; s++)	{
+					for(d=1; d<=numcodici+1; d++)printf(matrix[s][d] " ")
+					printf("\n")
+				}				
+     }
+                  
+
+
+

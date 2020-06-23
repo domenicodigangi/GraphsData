@@ -1,0 +1,691 @@
+#/*programma gawk che restituisce  un file testo gestibile con matlab contenente le colonne relative ai codici elencati
+
+
+BEGIN{
+       FS = "\t";   # imposto Tab come field separator 
+       
+#/*elenco i codici da cercare commentandoli con le rispettive descrizioni contenute nel file stesso alla riga due della colonna corrispondente al codice
+ 
+
+	codici[]= "\"IDRSSD\""; Nome
+
+	codici[]= "time"; 
+				#assets Total Assets assets  
+	
+	codici[]="RCFD2170"; # Consolidated Total assets 				
+
+	codici[]="RCON2170"; # domestic Total assets
+
+       	codici[]="RCFD2123"; # LESS: Any unearned income on loans reflected in items 1-9 above .
+
+	codici[]="RCON2123"; # LESS: Any unearned income on loans reflected in items 1-9 above .
+
+	codici[]="RCFD3123"; # LESS: Allowance for loan and lease losses
+
+	codici[]="RCON3123"; # LESS: Allowance for loan and lease losses
+
+				#Equity
+
+
+	codici[]="RCFD3210"; # #Total bank equity capital
+
+	codici[]="RCON3210"; # Total bank equity capital
+
+	codici[]="RCFD3000";#Noncontrolling (minority) interests in consolidated subsidiaries
+
+	codici[]="RCON3000";#Noncontrolling (minority) interests in consolidated subsidiaries
+
+	codici[] = "RCFDG105";#Total equity capital
+
+	codici[] = "RCONG105";#Total equity capital
+
+				#Cash and Balances
+	codici[] = "RCFD0081";
+
+	codici[] = "RCON0081";
+
+	codici[] = "RCFD0071";
+
+	codici[] = "RCON0071";
+
+				#US treasury securities
+
+	codici[] = "RCFD0211";
+
+	codici[] = "RCON0211";
+
+	codici[] = "RCFD1287";
+
+	codici[] = "RCON1287";
+
+	codici[] = "RDFD3531";
+
+	codici[] = "RCON3531";
+
+				#Us Agency securities
+
+	codici[] = "RCFD1289";
+
+	codici[] = "RCON1289";
+
+	codici[] = "RCFD1294";
+
+	codici[] = "RCON1294";
+
+	codici[] = "RCFD1293";
+
+	codici[] = "RCON1293";
+
+	codici[] = "RCFD1298";
+
+	codici[] = "RCON1298";
+
+	codici[] = "RCFD3532";
+
+	codici[] = "RCON3532";
+
+				#Securities issued by state and local governments
+
+	codici[] = "RCFD8496";
+
+	codici[] = "RCON8496";
+
+	codici[] = "RCFD8499";
+
+	codici[] = "RCON8499";
+
+	codici[] = "RCFD3533";
+
+	codici[] = "RCON3533";
+
+	
+				#Mortgage backed securities
+	codici[] = "RCFD1698";
+
+	codici[] = "RCON1698";
+
+	codici[] = "RCFD1702";
+
+	codici[] = "RCON1702";
+
+	codici[] = "RCFD1703";
+
+	codici[] = "RCON1703";
+
+	codici[] = "RCFD1707";
+
+	codici[] = "RCON1707";
+
+	codici[] = "RCFD1709";
+
+	codici[] = "RCON1709";
+
+	codici[] = "RCFD1713";
+
+	codici[] = "RCON1713";
+
+	codici[] = "RCFD1714";
+
+	codici[] = "RCON1714";
+
+	codici[] = "RCFD1717";
+
+	codici[] = "RCON1717";
+
+	codici[] = "RCFD1718";
+
+	codici[] = "RCON1718";
+
+	codici[] = "RCFD1732";
+
+	codici[] = "RCON1732";
+
+	codici[] = "RCFD1733";
+
+	codici[] = "RCON1733";
+
+	codici[] = "RCFD1736";
+
+	codici[] = "RCON1736";
+
+	codici[] = "RCFD3534";
+
+	codici[] = "RCON3534";
+
+	codici[] = "RCFD3535";
+
+	codici[] = "RCON3535";
+
+	codici[] = "RCFD3536";
+
+	codici[] = "RCON3536";
+
+	codici[] = "RCFDG303";
+
+	codici[] = "RCONG303";
+
+	codici[] = "RCFDG304";
+
+	codici[] = "RCONG304";
+
+	codici[] = "RCFDG307";
+
+	codici[] = "RCONG307";
+
+	codici[] = "RCFDG308";
+
+	codici[] = "RCONG308";
+
+	codici[] = "RCFDG311";
+
+	codici[] = "RCONG311";
+
+	codici[] = "RCFDG312";
+
+	codici[] = "RCONG312";
+
+	codici[] = "RCFDG315";
+
+	codici[] = "RCONG315";
+
+	codici[] = "RCFDG316";
+
+	codici[] = "RCONG316";
+
+	codici[] = "RCFDG319";
+
+	codici[] = "RCONG319";
+
+	codici[] = "RCFDG320";
+
+	codici[] = "RCONG320";
+
+	codici[] = "RCFDG323";
+
+	codici[] = "RCONG323";
+
+	codici[] = "RCFDG324";
+
+	codici[] = "RCONG324";
+
+	codici[] = "RCFDG327";
+
+	codici[] = "RCONG327";
+
+	codici[] = "RCFDG328";
+
+	codici[] = "RCONG328";
+
+	codici[] = "RCFDG331";
+
+	codici[] = "RCONG331";
+
+	codici[] = "RCFDG379";
+
+	codici[] = "RCONG379";
+
+	codici[] = "RCFDG380";
+
+	codici[] = "RCONG380";
+
+	codici[] = "RCFDG381";
+
+	codici[] = "RCONG381";
+
+	codici[] = "RCFDG382";
+
+	codici[] = "RCONG382";
+
+	codici[] = "RCFDG300";
+
+	codici[] = "RCONG300";
+
+	codici[] = "RCFDG303";
+
+	codici[] = "RCONG303";
+
+	codici[] = "RCFDG304";
+
+	codici[] = "RCONG304";
+
+	codici[] = "RCFDG307";
+
+	codici[] = "RCONG307";
+
+	codici[] = "RCFDG308";
+
+	codici[] = "RCONG308";
+
+	codici[] = "RCFDG311";
+
+	codici[] = "RCONG311";
+
+	codici[] = "RCFDG312";
+
+	codici[] = "RCONG312";
+
+	codici[] = "RCFDG315";
+
+	codici[] = "RCONG315";
+
+	codici[] = "RCFDG316";
+
+	codici[] = "RCONG316";
+
+	codici[] = "RCFDG319";
+
+	codici[] = "RCONG319";
+
+	codici[] = "RCFDG320";
+
+	codici[] = "RCONG320";
+
+	codici[] = "RCFDG323";
+
+	codici[] = "RCONG323";
+
+	codici[] = "RCFDK142";
+
+	codici[] = "RCONK142";
+
+	codici[] = "RCFDK145";
+
+	codici[] = "RCONK145";
+
+
+	codici[] = "RCFDK146";
+
+	codici[] = "RCONK146";
+
+	codici[] = "RCFDK149";
+
+	codici[] = "RCONK149";
+
+	codici[] = "RCFDK150";
+
+	codici[] = "RCONK150";
+
+	codici[] = "RCFDK153";
+
+	codici[] = "RCONK153";
+
+	codici[] = "RCFDK154";
+
+	codici[] = "RCONK154";
+
+	codici[] = "RCFDK157";
+
+	codici[] = "RCONK157";
+
+	codici[] = "RCFDG379";
+
+	codici[] = "RCONG379";
+
+	codici[] = "RCFDG380";
+
+	codici[] = "RCONG380";
+
+	codici[] = "RCFDG381";
+
+	codici[] = "RCONG381";
+
+	codici[] = "RCFDK197";
+
+	codici[] = "RCONK197";
+
+	codici[] = "RCFDK198";
+
+	codici[] = "RCONK198";
+
+					#Asset Backed securities
+
+	codici[] = "RCFDB838";
+
+	codici[] = "RCONB838";
+
+	codici[] = "RCFDB841";
+
+	codici[] = "RCONB841";
+
+	codici[] = "RCFDB842";
+
+	codici[] = "RCONB842";
+
+	codici[] = "RCFDB845";
+
+	codici[] = "RCONB845";
+
+	codici[] = "RCFDB846";
+
+	codici[] = "RCONB846";
+
+	codici[] = "RCFDB849";
+
+	codici[] = "RCONB849";
+
+	codici[] = "RCFDB850";
+
+	codici[] = "RCONB850";
+
+	codici[] = "RCFDB853";
+
+	codici[] = "RCONB853";
+
+	codici[] = "RCFDB854";
+
+	codici[] = "RCONB854";
+
+	codici[] = "RCFDB857";
+
+	codici[] = "RCONB857";
+
+	codici[] = "RCFDB858";
+
+	codici[] = "RCONB858";
+
+	codici[] = "RCFDB861";
+
+	codici[] = "RCONB861";
+
+	codici[] = "RCFDC026";
+
+	codici[] = "RCONC026";
+
+	codici[] = "RCFDG336";
+
+	codici[] = "RCONG336";
+
+	codici[] = "RCFDG340";
+
+	codici[] = "RCONG340";
+
+	codici[] = "RCFDG344";
+
+	codici[] = "RCONG344";
+
+	codici[] = "RCFDC027";
+
+	codici[] = "RCONC027";
+
+	codici[] = "RCFDG339";
+
+	codici[] = "RCONG339";
+
+	codici[] = "RCFDG343";
+
+	codici[] = "RCONG343";
+
+	codici[] = "RCFDG347";
+
+	codici[] = "RCONG347";
+
+				#OTHER DOMESTIC DEBT SECURITIES
+
+	codici[] = "RCFD1737";
+
+	codici[] = "RCON1737";
+
+	codici[] = "RCFD1741";
+
+	codici[] = "RCON1741";
+
+				#OTHER FOREIGH DEBT SECURITIES
+	codici[] = "RCFD1742";
+
+	codici[] = "RCON1742";
+
+	codici[] = "RCFD1746";
+
+	codici[] = "RCON1746";
+
+				#RESIDENTIAL SECURITIES
+	codici[] = "RCFDA511";
+
+	codici[] = "RCONA511";
+
+
+				#FFREPO_ASS
+	codici[] = "RCFD1350";
+
+	codici[] = "RCON1350";
+
+	codici[] = "RCFDB987";
+
+	codici[] = "RCONB987";
+
+	codici[] = "RCFDB989";
+
+	codici[] = "RCONB989";
+
+				#LN_CONST
+	codici[] = "RCFD1415";
+
+	codici[] = "RCON1415";
+
+	codici[] = "RCFDF158";
+
+	codici[] = "RCONF158";
+
+	codici[] = "RCFDF159";
+
+	codici[] = "RCONF159";
+
+				#LN_FARM
+
+	codici[] = "RCFD1420";
+
+	codici[] = "RCON1420";
+
+				#LN_RRE
+
+	codici[] = "RCFD5367";
+
+	codici[] = "RCON5367";
+
+	codici[] = "RCFD5368";
+
+	codici[] = "RCON5368";
+
+	codici[] = "RCFD1797";
+
+	codici[] = "RCON1797";
+
+				#LN_MULTI
+
+	codici[] = "RCFD1460";
+
+	codici[] = "RCON1460";
+
+
+				#LN_NFNR
+	codici[] = "RCFD1480";
+
+	codici[] = "RCON1480";
+
+	codici[] = "RCFDF160";
+
+	codici[] = "RCONF160";
+
+	codici[] = "RCFDF161";
+
+	codici[] = "RCONF161";
+
+
+				#LN_RE_FOR
+	codici[] = "RCFD1410";
+
+	codici[] = "RCON1410";
+
+				#LN_CI_DOM
+
+	codici[] = "RCFD1766";
+
+	codici[] = "RCON1766";
+				#LN_CI_FOR
+
+	codici[] = "RCFD1763";
+
+	codici[] = "RCON1763";
+
+	codici[] = "RCFD1764";
+
+	codici[] = "RCON1764";
+
+	codici[] = "RCFD1766";
+
+	codici[] = "RCON1766";
+
+				#LN_CONS_DOM
+
+	codici[] = "RCFD1975";
+
+	codici[] = "RCON1975";
+
+				#LN_CONS_FOR
+
+	codici[] = "RCFDB538";
+
+	codici[] = "RCONB538";
+
+	codici[] = "RCFDB539";
+
+	codici[] = "RCONB539";
+
+	codici[] = "RCFDK137";
+
+	codici[] = "RCONK137";
+
+	codici[] = "RCFDK207";
+
+	codici[] = "RCONK207";
+
+	codici[] = "RCFD2011";
+
+	codici[] = "RCON2011";
+
+	codici[] = "RCFD1975";
+
+	codici[] = "RCON1975";
+
+
+				#LN_FORGOV_OFFINST
+	codici[] = "RCFD2081";
+
+	codici[] = "RCON2081";
+
+
+				#OTHER LOANS
+	codici[] = "RCFD2122";
+
+	codici[] = "RCON2122";
+
+	codici[] = "RCFD2123";
+
+	codici[] = "RCON2123";
+
+				#OTHER_RE_OWNED
+	codici[] = "RCFD2150";
+
+	codici[] = "RCON2150";
+
+
+				#EQU_SEC_NONDET
+	codici[] = "RCFD1752";
+
+	codici[] = "RCON1752";
+
+				#LN_DEP_INST_BANKS (specific FFIEC CODES)
+
+	codici[] = "RCON1288";
+
+	codici[] = "RCFDB532";
+
+	codici[] = "RCFDB533";
+
+	codici[] = "RCFDB534";
+
+	codici[] = "RCFDB536";
+
+	codici[] = "RCFDB537";
+
+	codici[] = "RCFD1590";
+
+	codici[] = "RCON1590";
+
+	codici[] = "RCFD2182";
+
+	codici[] = "RCON2182";
+
+	codici[] = "RCFD2183";
+
+	codici[] = "RCON2183";
+
+	codici[] = "RCFDF162";
+
+	codici[] = "RCONF162";
+
+	codici[] = "RCFDF163";
+
+	codici[] = "RCONF163";
+
+	
+
+
+
+	
+		
+	
+	
+
+
+
+
+
+numcodici = ; #è il numero dei codici da cercare. Va aggiornato se si aggiungono codici
+
+for(n=1; n<=numcodici; n++) colonnecodici[n] = 0; #inizializzo il vettore colonnecodici a 0 . se un codice non viene trovato nel primo record il corrispettivo valore di colonnecodici[indicecodicenontrovato] è 0
+  
+codtrov=0; # serve a contare il numero di codici trovati nel primo record
+offsetline=0; #serve a shiftare verso il basso matrix nel caso in cui la seconda linea non sia da trascurare
+
+}             
+
+# cerca i codici elencati in codici[] nel primo record , se li trova annota il numero del field(colonna) corrispondente in colonnecodici[] e aumenta di uno codtrov.
+(NR==1){for(l=1; l<=numcodici; l++){
+				for(j=0; j<=NF; j++){
+							if(codici[l]==$j) {colonnecodici[l]=j; codtrov++;}
+														
+ 						    }
+			     }
+
+	}
+#controllo se la seconda linea contiene numeri o testo 
+(NR==2){if($1 !=""){ 
+			offsetline=1;	
+			for(m=1; m<=numcodici; m++){matrix[NR + offsetline][m]="NaN";}  
+			for(k=1;k<=numcodici; k++){if(colonnecodici[k]!=0 && $colonnecodici[k]!=""){matrix[NR + offsetline][k]=$colonnecodici[k];}
+     		 										   }   
+			
+		    }
+	}
+
+# annotati i numeri delle colonne di interesse in colonnecodici per ogni record (riga) copio i valori delle colonne corrispondenti nella matrice matrix[][] di dimensioni NR *  numcodici. copio anche le colonne corrispondenti a codici non trovati per avere matrici delle stesse dimensioni  pur processando files relativi a periodi diversi
+
+
+(NR != 2){	
+		for(m=1; m<=numcodici; m++){matrix[NR + offsetline][m]="NaN";}  
+		for(k=1;k<=numcodici; k++){if(colonnecodici[k]!=0 && $colonnecodici[k]!=""){matrix[NR + offsetline][k]=$colonnecodici[k];}
+     		 }
+	}
+        
+  END{ 									
+		for(s=1; s<=NR + offsetline; s++)	{
+					for(d=1; d<numcodici; d++)printf(matrix[s][d] "\t")
+					printf(matrix[s][d+1])
+					printf("\n")
+				}				
+     }
+                  
+
+
+
