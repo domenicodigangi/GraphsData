@@ -35,7 +35,6 @@ for d in all_icons_download:
 
 
 #%% unzip downloaded files
-curr_path = os.getcwd()
 load_direct = "./raw_data_files/zip_files/"
 unzip_direct = "./raw_data_files/"
 files = os.listdir(load_direct) 
